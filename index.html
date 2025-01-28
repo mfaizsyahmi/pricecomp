@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html style="font-family:sans-serif">
+<head>
+<title>Simple price comparator table</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+</head>
+<body>
+<form>
+<table>
+<thead>	<tr><th>Price<th id="qtyHeader">Qty(g/mL)<th>Unit price<td></tr> </thead>
+<tbody> </tbody>
+</table>
+<div>
+	<button id="btnAddRow" type="button" onclick="addRow()">Add row</button>
+	<label><input type="checkbox" id="timesthousand" onchange="valueUpdateAll()">Unit price x1000</label>
+</div>
+</form>
+<script>
+const $1 = document.querySelector.bind(document);
+const tableBody = document.querySelector("table tbody")
+function valueUpdate(rowId, which) {
+	const factor = document.querySelector(`#timesthousand`).checked ? 1000 : 1;
+	const result = $1(`#${rowId}P`).value / $1(`#${rowId}Q`).value * factor
+	$1(`#${rowId}R`).value = parseFloat(result).toFixed(2)
+}
+function valueUpdateAll() {
+//	$1("#qtyHeader").innerText = $1("#timesthousand").checked 
+//		? "Qty(Kg/L)"
+//		: "Qty(g/mL)"
+	for (let row of tableBody.children) {
+		valueUpdate(row.id,"");
+	}
+}
+function addRow() {
+	const newId = "ROW" + Date.now()
+	tableBody.innerHTML += `<tr id="${newId}">
+		<td><input type="number" inputmode="numeric" id="${newId}P" oninput="valueUpdate('${newId}','P')" step="0.1">
+		<td><input type="number" inputmode="numeric" id="${newId}Q" oninput="valueUpdate('${newId}','Q')" step="10" >
+		<td><input id="${newId}R" readonly >
+		<td><button type="button" onclick="removeRow('${newId}')">&times;</button>
+	</tr>`
+	setTimeout(_ => document.querySelector(`#${newId}P`)?.focus(), 10);
+}
+function removeRow(id) {
+	$1(`#${id}`).remove();
+	if (!tableBody.children.length) addRow();
+}
+addRow()
+</script>
+<style>
+table input {max-width:25vw}
+</style>
+</body>
+</html>
