@@ -33,12 +33,12 @@ function valueUpdateAll() {
 }
 function addRow() {
 	const newId = "ROW" + Date.now()
-	tableBody.innerHTML += `<tr id="${newId}">
+	tableBody.insertAdjacentHTML('beforeend', `<tr id="${newId}">
 		<td><input type="number" inputmode="numeric" id="${newId}P" oninput="valueUpdate('${newId}','P')" step="0.1">
 		<td><input type="number" inputmode="numeric" id="${newId}Q" oninput="valueUpdate('${newId}','Q')" step="10" >
 		<td><input id="${newId}R" readonly >
 		<td><button type="button" onclick="removeRow('${newId}')">&times;</button>
-	</tr>`
+	</tr>`);
 	setTimeout(_ => document.querySelector(`#${newId}P`)?.focus(), 10);
 }
 function removeRow(id) {
